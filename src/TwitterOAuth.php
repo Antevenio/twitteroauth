@@ -194,6 +194,40 @@ class TwitterOAuth extends Config
     }
 
     /**
+     * @param $path
+     * @param array $parameters
+     * @return array|object
+     */
+    public function getLabs($path, array $parameters)
+    {
+        $this->resetLastResponse();
+        $this->resetAttemptsNumber();
+        $this->response->setApiPath($path);
+        $url = sprintf('%s/%s', $this->apiHost, $path);
+
+        return $this->makeRequests($url, 'GET', $parameters, false);
+    }
+
+    /**
+     * @param $path
+     * @param array $parameters
+     * @param $json
+     * @return array|object
+     */
+    public function postInsights($path, array $parameters, $json)
+    {
+        $this->resetLastResponse();
+        $this->resetAttemptsNumber();
+        $this->response->setApiPath($path);
+        $url = sprintf('%s/%s', $this->apiHost, $path);
+        if (!$json) {
+            $parameters = $this->cleanUpParameters($parameters);
+        }
+
+        return $this->makeRequests($url, 'POST', $parameters, $json);
+    }
+
+    /**
      * Make GET requests to the API.
      *
      * @param string $path
